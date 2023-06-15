@@ -3,10 +3,11 @@ class WeatherEntity {
   final String description;
   final double tempMin;
   final double tempMax;
-  final double speedWind;
   final String city;
   final int pressure;
   final double feelsLike;
+  final double speedWind;
+  final int degreeWind;
 
   WeatherEntity({
     required this.currentTemperature,
@@ -17,5 +18,6 @@ class WeatherEntity {
     required this.city,
     required this.pressure,
     required this.feelsLike,
+    required this.degreeWind,
   });
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/core.dart';
+import 'components/components.dart';
 import 'meteorology.dart';
 
 class MeteorologyScreen extends StatefulWidget {
@@ -104,7 +105,7 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
                   ),
                 ),
                 Sized.bigger.verticalSized,
-                _MoreInfoTemperature(viewModel: current),
+                MoreInfoTemperature(viewModel: current),
               ],
             ),
           ),
@@ -143,88 +144,6 @@ class _CurrentTemp extends StatelessWidget {
               fontSize: 30,
               fontWeight: FontWeight.bold,
             ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _MoreInfoTemperature extends StatelessWidget {
-  const _MoreInfoTemperature({required this.viewModel});
-  final WeatherViewModel viewModel;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: Row(
-        children: [
-          Expanded(
-            child: Container(
-              width: double.maxFinite,
-              color: Colors.red,
-            ),
-          ),
-          Sized.small.horizontalSized,
-          Expanded(
-            child: Container(
-              width: double.maxFinite,
-              padding: Sized.middle.all,
-              decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(.15),
-                  borderRadius: BorderRadius.circular(20)),
-              child: Column(
-                children: [
-                  _ListTile(
-                    title: 'Umidade',
-                    trailing: viewModel.airHumidity,
-                  ),
-                  Sized.middle.verticalSized,
-                  _ListTile(
-                    title: 'Sensação',
-                    trailing: viewModel.feelsLike,
-                  ),
-                  Sized.middle.verticalSized,
-                  _ListTile(
-                    title: 'Pressão',
-                    trailing: viewModel.pressure,
-                  ),
-                  Sized.middle.verticalSized,
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _ListTile extends StatelessWidget {
-  const _ListTile({
-    required this.title,
-    required this.trailing,
-  });
-
-  final String title;
-  final String trailing;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-          ),
-        ),
-        Text(
-          trailing,
-          style: const TextStyle(
-            color: Colors.white,
           ),
         ),
       ],
