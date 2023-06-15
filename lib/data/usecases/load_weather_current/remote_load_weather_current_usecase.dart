@@ -14,7 +14,8 @@ class RemoteLoadWeatherCurrentUsecase implements LoadWeatherCurrentUsecase {
   Future<WeatherEntity> call({
     required ({double lat, double long}) position,
   }) async {
-    final response = await httpClient(url: url, method: Method.get);
+    final urlWithPosition = '$url&lat=${position.lat}&lon=${position.long}';
+    final response = await httpClient(url: urlWithPosition, method: Method.get);
 
     return WeatherEntity(
         currentTemperature: 2,
