@@ -52,29 +52,8 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
         child: ListView(
           children: [
             Sized.bigger.verticalSized,
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  current.currentTemperature,
-                  style: const TextStyle(
-                    fontSize: 112,
-                    color: Colors.white,
-                  ),
-                ),
-                Container(
-                  margin: Sized.middle.vertical,
-                  child: const Text(
-                    "°C",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ],
+            _CurrentTemp(
+              currentTemperature: current.currentTemperature,
             ),
             Text(
               current.description,
@@ -87,6 +66,42 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _CurrentTemp extends StatelessWidget {
+  const _CurrentTemp({
+    required this.currentTemperature,
+  });
+
+  final String currentTemperature;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          currentTemperature,
+          style: const TextStyle(
+            fontSize: 112,
+            color: Colors.white,
+          ),
+        ),
+        Container(
+          margin: Sized.middle.vertical,
+          child: const Text(
+            "°C",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
