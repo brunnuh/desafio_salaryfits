@@ -6,6 +6,8 @@ class WeatherViewModel {
   final String airHumidity;
   final String speedWind;
   final String description;
+  final String tempMax;
+  final String tempMin;
 
   WeatherViewModel({
     required this.city,
@@ -13,6 +15,8 @@ class WeatherViewModel {
     required this.airHumidity,
     required this.speedWind,
     required this.description,
+    required this.tempMin,
+    required this.tempMax,
   });
 
   factory WeatherViewModel.empty() => WeatherViewModel(
@@ -21,6 +25,8 @@ class WeatherViewModel {
         airHumidity: '',
         speedWind: '',
         description: '',
+        tempMax: '',
+        tempMin: '',
       );
 
   factory WeatherViewModel.toViewModel(WeatherEntity entity) {
@@ -30,6 +36,8 @@ class WeatherViewModel {
       airHumidity: '',
       speedWind: entity.speedWind.toString(),
       description: entity.description,
+      tempMin: entity.tempMin.floor().toString(),
+      tempMax: entity.tempMax.floor().toString(),
     );
   }
 }

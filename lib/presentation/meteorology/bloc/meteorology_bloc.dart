@@ -10,18 +10,22 @@ class MeteorologyBloc extends Bloc<MeteorologyEvent, MeteorologyState> {
   MeteorologyBloc({
     required LoadWeatherCurrentUsecase loadWeatherCurrentUsecase,
   })  : _loadWeatherCurrentUsecase = loadWeatherCurrentUsecase,
-        super(MeteorologyInitial(viewModel: WeatherViewModel.empty())) {
+        super(MeteorologyInitial()) {
     on(_mapToState);
   }
 
   final LoadWeatherCurrentUsecase _loadWeatherCurrentUsecase;
 
   void _mapToState(MeteorologyEvent event, Emitter emit) async {
+    emit(MeteorologyLoadingState(
+      viewModel: event.weatherViewModel ?? WeatherViewModel.empty(),
+    ));
+
     switch (event) {
       case MeterologyLoadWeatherEvent():
         _loadWeatherCurrent();
       case MeterologySetWeatherEvent(weatherViewModel: var viewModel):
-        emit(MeteorologyLoadedWeatherState(viewModel: viewModel));
+        emit(MeteorologyLoadedWeatherState(viewModel: viewModel!));
     }
   }
 
@@ -33,7 +37,8 @@ class MeteorologyBloc extends Bloc<MeteorologyEvent, MeteorologyState> {
 
     add(
       MeterologySetWeatherEvent(
-          weatherViewModel: WeatherViewModel.toViewModel(weatherEntity)),
+        weatherViewModel: WeatherViewModel.toViewModel(weatherEntity),
+      ),
     );
   }
 }

@@ -23,19 +23,43 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
   }
 
   @override
+  void didUpdateWidget(covariant MeteorologyScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    widget.bloc.add(MeterologyLoadWeatherEvent());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<MeteorologyBloc, MeteorologyState>(
       bloc: widget.bloc,
       builder: (context, state) {
         final current = state.viewModel;
+        final loading = state is MeteorologyLoadingState;
+
         return Scaffold(
           appBar: AppBar(
-            title: Text(
-              current.city,
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w600,
-              ),
+            title: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  current.city,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                if (loading) ...[
+                  const Text(
+                    'Atualizando ...',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.white,
+                    ),
+                  ),
+                ] else ...[
+                  Sized.middle.verticalSized,
+                ]
+              ],
             ),
             leading: const Icon(
               Icons.add,
@@ -47,6 +71,15 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
                 Icons.more_vert_outlined,
                 color: Colors.white,
                 size: 32,
+              ),
+              InkWell(
+                onTap: () => widget.bloc
+                    .add(MeterologyLoadWeatherEvent(weatherViewModel: current)),
+                child: const Icon(
+                  Icons.refresh_outlined,
+                  color: Colors.white,
+                  size: 32,
+                ),
               ),
               Sized.small.horizontalSized,
             ],
@@ -63,7 +96,7 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
                   currentTemperature: current.currentTemperature,
                 ),
                 Text(
-                  current.description,
+                  "${current.description} ${current.tempMin}°/${current.tempMax}°",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                     color: Colors.white,

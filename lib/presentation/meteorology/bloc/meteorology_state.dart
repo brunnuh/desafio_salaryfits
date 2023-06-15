@@ -7,7 +7,11 @@ sealed class MeteorologyState {
 }
 
 class MeteorologyInitial extends MeteorologyState {
-  MeteorologyInitial({required super.viewModel});
+  MeteorologyInitial() : super(viewModel: WeatherViewModel.empty());
+}
+
+class MeteorologyLoadingState extends MeteorologyState {
+  MeteorologyLoadingState({required super.viewModel});
 }
 
 class MeteorologyLoadedWeatherState extends MeteorologyState {
