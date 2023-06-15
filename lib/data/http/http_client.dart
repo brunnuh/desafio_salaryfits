@@ -4,6 +4,7 @@ abstract interface class HttpClient {
     required Method method,
     Map? body,
     Map? headers,
+    Map<String, dynamic>? params,
   });
 }
 

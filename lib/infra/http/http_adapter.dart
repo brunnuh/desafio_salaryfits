@@ -16,8 +16,10 @@ class HttpAdapter implements HttpClient {
     required Method method,
     Map? body,
     Map? headers,
+    Map<String, dynamic>? params,
   }) async {
-    final uri = Uri.parse(url);
+    final uri = Uri.parse(url + _paramsMapToString(params));
+
     final defaultHeaders = headers?.cast<String, String>() ?? {}
       ..addAll(
         {'content-type': 'application/json', 'accept': 'application/json'},
@@ -25,8 +27,20 @@ class HttpAdapter implements HttpClient {
 
     Response response = Response('', 500);
     if (method == Method.get) {
-      response = await client.get(uri, headers: defaultHeaders);
+      response = await client.get(
+        uri,
+        headers: defaultHeaders,
+      );
     }
     return jsonDecode(response.body);
+  }
+
+  String _paramsMapToString(Map<String, dynamic>? params) {
+    String query = '';
+    params?.forEach((key, value) {
+      query += "&$key=$value&";
+    });
+
+    return query;
   }
 }

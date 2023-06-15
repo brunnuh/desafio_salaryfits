@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:desafio_salaryfits/domain/usecases/load_weather_current_usecase.dart';
 
+import '../../presentation.dart';
+
 part 'meteorology_event.dart';
 part 'meteorology_state.dart';
 
@@ -8,7 +10,7 @@ class MeteorologyBloc extends Bloc<MeteorologyEvent, MeteorologyState> {
   MeteorologyBloc({
     required LoadWeatherCurrentUsecase loadWeatherCurrentUsecase,
   })  : _loadWeatherCurrentUsecase = loadWeatherCurrentUsecase,
-        super(MeteorologyInitial()) {
+        super(MeteorologyInitial(viewModel: WeatherViewModel.empty())) {
     on(_mapToState);
   }
 
@@ -18,6 +20,8 @@ class MeteorologyBloc extends Bloc<MeteorologyEvent, MeteorologyState> {
     switch (event) {
       case MeterologyLoadWeatherEvent():
         _loadWeatherCurrent();
+      case MeterologySetWeatherEvent(weatherViewModel: var viewModel):
+        emit(MeteorologyLoadedWeatherState(viewModel: viewModel));
     }
   }
 
@@ -25,6 +29,11 @@ class MeteorologyBloc extends Bloc<MeteorologyEvent, MeteorologyState> {
     //TODO: pegar por outro lugar
     const position = (lat: -18.9777556, long: -48.2676753);
 
-    await _loadWeatherCurrentUsecase(position: position);
+    final weatherEntity = await _loadWeatherCurrentUsecase(position: position);
+
+    add(
+      MeterologySetWeatherEvent(
+          weatherViewModel: WeatherViewModel.toViewModel(weatherEntity)),
+    );
   }
 }
