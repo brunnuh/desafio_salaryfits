@@ -90,9 +90,10 @@ class _InfosWind extends StatelessWidget {
               children: [
                 Text(
                   viewModel.degToDirection,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 17,
+                    fontSize: 16,
                     fontWeight: FontWeight.w700,
                   ),
                 ),

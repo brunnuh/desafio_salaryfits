@@ -5,21 +5,23 @@ class RemoteLoadWeatherCurrentUsecase implements LoadWeatherCurrentUsecase {
   RemoteLoadWeatherCurrentUsecase({
     required this.httpClient,
     required this.url,
+    required this.locationDevice,
   });
 
   final HttpClient httpClient;
+  final LocationDevice locationDevice;
   final String url;
 
   @override
-  Future<WeatherEntity> call({
-    required ({double lat, double long}) position,
-  }) async {
+  Future<WeatherEntity> call() async {
+    final position = await locationDevice();
+
     final response = await httpClient(
       url: url,
       method: Method.get,
       params: {
         'lat': position.lat,
-        'lon': position.long,
+        'lon': position.lon,
         'units': 'metric',
       },
     );

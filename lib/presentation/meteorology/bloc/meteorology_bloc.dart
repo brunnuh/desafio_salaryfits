@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
-import 'package:desafio_salaryfits/domain/usecases/load_weather_current_usecase.dart';
 
+import '../../../domain/domain.dart';
 import '../../presentation.dart';
 
 part 'meteorology_event.dart';
@@ -30,10 +30,7 @@ class MeteorologyBloc extends Bloc<MeteorologyEvent, MeteorologyState> {
   }
 
   void _loadWeatherCurrent() async {
-    //TODO: pegar por outro lugar
-    const position = (lat: -18.9777556, long: -48.2676753);
-
-    final weatherEntity = await _loadWeatherCurrentUsecase(position: position);
+    final weatherEntity = await _loadWeatherCurrentUsecase();
 
     add(
       MeterologySetWeatherEvent(
