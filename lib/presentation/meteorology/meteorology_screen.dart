@@ -1,10 +1,15 @@
-import 'package:desafio_salaryfits/core/constants/sized.dart';
 import 'package:flutter/material.dart';
 
+import '../../core/core.dart';
+import 'bloc/meteorology_bloc.dart';
 import 'meteorology.dart';
 
 class MeteorologyScreen extends StatefulWidget {
-  const MeteorologyScreen({super.key});
+  const MeteorologyScreen({
+    super.key,
+    required this.bloc,
+  });
+  final MeteorologyBloc bloc;
 
   @override
   State<MeteorologyScreen> createState() => _MeteorologyScreenState();
@@ -19,6 +24,14 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
     windSpeed: '32,0km/h',
     description: 'Nublado',
   );
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    widget.bloc.add(MeterologyLoadWeatherEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
