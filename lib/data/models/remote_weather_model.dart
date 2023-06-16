@@ -10,6 +10,7 @@ class RemoteWeatherModel {
   final int pressure;
   final int degreeWind;
   final double feelsLike;
+  final DateTime? dateTime;
 
   RemoteWeatherModel({
     required this.currentTemperature,
@@ -21,6 +22,7 @@ class RemoteWeatherModel {
     required this.pressure,
     required this.feelsLike,
     required this.degreeWind,
+    this.dateTime,
   });
 
   WeatherEntity get toEntity {
@@ -34,6 +36,7 @@ class RemoteWeatherModel {
       feelsLike: feelsLike,
       pressure: pressure,
       degreeWind: degreeWind,
+      dateTime: dateTime,
     );
   }
 
@@ -48,6 +51,7 @@ class RemoteWeatherModel {
       speedWind: map['wind']['speed']?.toDouble() ?? 0.0,
       degreeWind: map['wind']['deg'] ?? 0,
       city: map['name'] ?? '',
+      dateTime: map['dt_txt'] != null ? DateTime.parse(map['dt_txt']) : null,
     );
   }
 }

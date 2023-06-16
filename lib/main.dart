@@ -1,5 +1,6 @@
-import 'package:desafio_salaryfits/main/factories/screens/meteorology_screen/meteorology_screen_factory.dart';
 import 'package:flutter/material.dart';
+
+import 'main/factories/factories.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,7 +20,11 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: makeMeteorologyScreen(),
+      initialRoute: '/',
+      routes: {
+        '/': (_) => makeMeteorologyScreen(),
+        '/nextDays': (_) => makeNextDaysScreen(),
+      },
     );
   }
 }

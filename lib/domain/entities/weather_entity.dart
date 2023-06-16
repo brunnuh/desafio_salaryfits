@@ -8,6 +8,7 @@ class WeatherEntity {
   final double feelsLike;
   final double speedWind;
   final int degreeWind;
+  final DateTime? dateTime;
 
   WeatherEntity({
     required this.currentTemperature,
@@ -19,5 +20,6 @@ class WeatherEntity {
     required this.pressure,
     required this.feelsLike,
     required this.degreeWind,
+    this.dateTime,
   });
 }

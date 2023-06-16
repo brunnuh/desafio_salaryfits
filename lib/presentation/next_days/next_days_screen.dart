@@ -1,16 +1,24 @@
 import 'package:desafio_salaryfits/core/constants/sized.dart';
+import 'package:desafio_salaryfits/presentation/next_days/bloc/next_days_bloc.dart';
 import 'package:desafio_salaryfits/presentation/next_days/components/components.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NextDaysScreen extends StatefulWidget {
-  const NextDaysScreen({super.key});
+  const NextDaysScreen({super.key, required this.bloc});
+  final NextDaysBloc bloc;
 
   @override
   State<NextDaysScreen> createState() => _NextDaysScreenState();
 }
 
 class _NextDaysScreenState extends State<NextDaysScreen> {
+  @override
+  void initState() {
+    super.initState();
+    widget.bloc.add(LoadNextDays());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

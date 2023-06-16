@@ -6,7 +6,7 @@ import 'package:desafio_salaryfits/main/factories/http/http.dart';
 LoadWeatherCurrentUsecase makeRemoteLoadWeaterCurrentFactory() {
   return RemoteLoadWeatherCurrentUsecase(
     httpClient: makeHttpClient(),
-    url: makeApiUrl('2.5/weather'),
+    url: makeApiUrl('weather'),
     locationDevice: makeLocationFactory(),
   );
 }

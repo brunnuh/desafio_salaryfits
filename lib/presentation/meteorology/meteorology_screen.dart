@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -124,12 +123,7 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      CupertinoPageRoute(
-                        builder: (_) => const NextDaysScreen(),
-                      ),
-                    );
+                    Navigator.pushNamed(context, '/nextDays');
                   },
                 ),
                 Sized.middle.verticalSized,
