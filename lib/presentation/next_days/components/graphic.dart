@@ -17,13 +17,13 @@ class _GraphicState extends State<Graphic> {
     const FlSpot(2, 31),
     const FlSpot(3, 31),
     const FlSpot(4, 30),
-    const FlSpot(5, 28),
   ];
   late List<int> spotsIndex;
   late List<LineChartBarData> lineBarsData;
 
   double get higherTemperature {
-    return spots.reduce((a, b) => a.y > b.y ? a : b).y + 1;
+    return spots.reduce((previo, next) => previo.y > next.y ? previo : next).y +
+        1;
   }
 
   @override
@@ -41,8 +41,8 @@ class _GraphicState extends State<Graphic> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100,
-      padding: Sized.middle.horizontal,
+      height: 80,
+      padding: Sized.bigger.horizontal,
       child: LineChart(
         LineChartData(
           maxY: higherTemperature,
@@ -70,6 +70,7 @@ class _GraphicState extends State<Graphic> {
             },
             touchTooltipData: LineTouchTooltipData(
               tooltipBgColor: Colors.transparent,
+              tooltipMargin: 0,
               getTooltipItems: (List<LineBarSpot> lineBarsSpot) {
                 return lineBarsSpot.map((lineBarSpot) {
                   return LineTooltipItem(
