@@ -69,7 +69,7 @@ class WeatherViewModel {
     return WeatherViewModel(
       city: entity.city,
       currentTemperature: "${entity.currentTemperature.floor()}",
-      airHumidity: '82%',
+      airHumidity: "${entity.airHumidity}%",
       speedWind: entity.speedWind,
       description: entity.description,
       tempMin: "${entity.tempMin.floor()}",

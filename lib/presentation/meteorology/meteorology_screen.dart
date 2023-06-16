@@ -20,7 +20,7 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
   @override
   void initState() {
     super.initState();
-    widget.bloc.add(MeterologyLoadWeatherEvent());
+    widget.bloc.add(MeterologyLoadWeatherEvent(isFirstLoad: true));
   }
 
   @override
@@ -36,100 +36,104 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
       builder: (context, state) {
         final current = state.viewModel;
         final loading = state is MeteorologyLoadingState;
+        final firstLoad = loading && state.isFirstLoad;
 
         return Scaffold(
-          appBar: AppBar(
-            title: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  current.city,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
+          appBar: firstLoad
+              ? null
+              : AppBar(
+                  title: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        current.city,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      if (loading) ...[
+                        const Text(
+                          'Atualizando ...',
+                          style: TextStyle(
+                            fontSize: 13,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ] else ...[
+                        Sized.middle.verticalSized,
+                      ]
+                    ],
                   ),
-                ),
-                if (loading) ...[
-                  const Text(
-                    'Atualizando ...',
-                    style: TextStyle(
-                      fontSize: 13,
+                  actions: [
+                    const Icon(
+                      Icons.more_vert_outlined,
                       color: Colors.white,
+                      size: 32,
                     ),
-                  ),
-                ] else ...[
-                  Sized.middle.verticalSized,
-                ]
-              ],
-            ),
-            leading: const Icon(
-              Icons.add,
-              color: Colors.white,
-              size: 32,
-            ),
-            actions: [
-              const Icon(
-                Icons.more_vert_outlined,
-                color: Colors.white,
-                size: 32,
-              ),
-              InkWell(
-                onTap: () => widget.bloc
-                    .add(MeterologyLoadWeatherEvent(weatherViewModel: current)),
-                child: const Icon(
-                  Icons.refresh_outlined,
-                  color: Colors.white,
-                  size: 32,
+                    InkWell(
+                      onTap: () => widget.bloc.add(MeterologyLoadWeatherEvent(
+                          weatherViewModel: current)),
+                      child: const Icon(
+                        Icons.refresh_outlined,
+                        color: Colors.white,
+                        size: 32,
+                      ),
+                    ),
+                    Sized.small.horizontalSized,
+                  ],
+                  centerTitle: true,
+                  backgroundColor: const Color(0xff5593DC),
                 ),
-              ),
-              Sized.small.horizontalSized,
-            ],
-            centerTitle: true,
-            backgroundColor: const Color(0xff5593DC),
-          ),
           body: Container(
             color: const Color(0xff5593DC),
             padding: Sized.middle.all,
-            child: ListView(
-              children: [
-                Sized.bigger.verticalSized,
-                _CurrentTemp(
-                  currentTemperature: current.currentTemperature,
-                ),
-                Text(
-                  "${current.description} ${current.tempMin}/${current.tempMax}",
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                  ),
-                ),
-                Sized.bigger.verticalSized,
-                ElevatedButton(
-                  style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll(
-                      Color.fromARGB(90, 255, 255, 255),
+            child: firstLoad
+                ? const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
                     ),
-                  ),
-                  child: Container(
-                    height: 50,
-                    alignment: Alignment.center,
-                    child: const Text(
-                      'Previsão para 5 dias',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 18,
+                  )
+                : ListView(
+                    children: [
+                      Sized.bigger.verticalSized,
+                      _CurrentTemp(
+                        currentTemperature: current.currentTemperature,
                       ),
-                    ),
+                      Text(
+                        "${current.description} ${current.tempMin}/${current.tempMax}",
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                        ),
+                      ),
+                      Sized.bigger.verticalSized,
+                      ElevatedButton(
+                        style: const ButtonStyle(
+                          backgroundColor: MaterialStatePropertyAll(
+                            Color.fromARGB(90, 255, 255, 255),
+                          ),
+                        ),
+                        child: Container(
+                          height: 50,
+                          alignment: Alignment.center,
+                          child: const Text(
+                            'Previsão para 5 dias',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/nextDays');
+                        },
+                      ),
+                      Sized.middle.verticalSized,
+                      MoreInfoTemperature(viewModel: current),
+                    ],
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/nextDays');
-                  },
-                ),
-                Sized.middle.verticalSized,
-                MoreInfoTemperature(viewModel: current),
-              ],
-            ),
           ),
         );
       },

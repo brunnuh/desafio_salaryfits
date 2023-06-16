@@ -11,7 +11,11 @@ class MeteorologyInitial extends MeteorologyState {
 }
 
 class MeteorologyLoadingState extends MeteorologyState {
-  MeteorologyLoadingState({required super.viewModel});
+  final bool isFirstLoad;
+  MeteorologyLoadingState({
+    required super.viewModel,
+    this.isFirstLoad = false,
+  });
 }
 
 class MeteorologyLoadedWeatherState extends MeteorologyState {

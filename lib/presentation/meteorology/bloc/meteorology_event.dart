@@ -6,7 +6,11 @@ sealed class MeteorologyEvent {
 }
 
 class MeterologyLoadWeatherEvent extends MeteorologyEvent {
-  MeterologyLoadWeatherEvent({super.weatherViewModel});
+  final bool isFirstLoad;
+  MeterologyLoadWeatherEvent({
+    super.weatherViewModel,
+    this.isFirstLoad = false,
+  });
 }
 
 class MeterologySetWeatherEvent extends MeteorologyEvent {

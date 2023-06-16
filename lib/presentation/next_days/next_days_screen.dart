@@ -108,10 +108,10 @@ class _NextFiveDaysGraphicsState extends State<_NextFiveDaysGraphics> {
         height: 340,
         child: Stack(
           children: [
-            _NextFiveDaysTitles(),
+            _NextFiveDaysTitles(viewModels: widget.viewModels),
             if (viewModels.isNotEmpty) ...[
               Positioned(
-                top: 150,
+                top: 90,
                 width: constraints.maxWidth,
                 child: Graphic(
                   temperatures: widget.viewModels
@@ -120,7 +120,7 @@ class _NextFiveDaysGraphicsState extends State<_NextFiveDaysGraphics> {
                 ),
               ),
               Positioned(
-                top: 200,
+                top: 170,
                 width: constraints.maxWidth,
                 child: Graphic(
                   temperatures: widget.viewModels
@@ -137,36 +137,51 @@ class _NextFiveDaysGraphicsState extends State<_NextFiveDaysGraphics> {
 }
 
 class _NextFiveDaysTitles extends StatelessWidget {
+  const _NextFiveDaysTitles({this.viewModels = const []});
+  final List<WeatherViewModel> viewModels;
+
   @override
   Widget build(BuildContext context) {
     DateTime now = DateTime.now();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(5, (index) {
+      children: List.generate(viewModels.length, (index) {
         String value = DateFormat.EEEE().format(now);
-
         if (index == 0) {
           value = 'Hoje';
         }
+
         final child = Container(
           height: double.maxFinite,
           width: 65,
-          padding: Sized.bigger.vertical,
+          padding: Sized.middle.vertical,
           decoration: BoxDecoration(
             color: index == 0 ? Colors.white10 : null,
             borderRadius: BorderRadius.circular(15),
           ),
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                value,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 14,
-                ),
+              Column(
+                children: [
+                  Text(
+                    value,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                  Text(
+                    DateFormat.Md().format(now),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
               Text(
-                DateFormat.Md().format(now),
+                viewModels[index].speedWindMsToKm,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 12,
