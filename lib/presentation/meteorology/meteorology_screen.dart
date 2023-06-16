@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/core.dart';
+import '../presentation.dart';
 import 'components/components.dart';
-import 'meteorology.dart';
 
 class MeteorologyScreen extends StatefulWidget {
   const MeteorologyScreen({
@@ -105,6 +106,33 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
                   ),
                 ),
                 Sized.bigger.verticalSized,
+                ElevatedButton(
+                  style: const ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(
+                      Color.fromARGB(90, 255, 255, 255),
+                    ),
+                  ),
+                  child: Container(
+                    height: 50,
+                    alignment: Alignment.center,
+                    child: const Text(
+                      'Previsão para 5 dias',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (_) => const NextDaysScreen(),
+                      ),
+                    );
+                  },
+                ),
+                Sized.middle.verticalSized,
                 MoreInfoTemperature(viewModel: current),
               ],
             ),
