@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 
 import '../../../domain/domain.dart';
+import '../../presentation.dart';
 
 part 'next_days_event.dart';
 part 'next_days_state.dart';
@@ -14,14 +15,18 @@ class NextDaysBloc extends Bloc<NextDaysEvent, NextDaysState> {
 
   final LoadWeatherFiveDaysUsecase loadWeatherFiveDaysUsecase;
 
-  void _mapToState(NextDaysEvent event, Emitter emit) {
+  void _mapToState(NextDaysEvent event, Emitter emit) async {
+    emit(NextDaysLoadingState());
     switch (event) {
       case LoadNextDays():
-        loadNextFiveDays();
+        final viewModels = await _loadNextFiveDays();
+        emit(NextDaysLoaded(viewModels: viewModels));
     }
   }
 
-  Future<void> loadNextFiveDays() async {
+  Future<List<WeatherViewModel>> _loadNextFiveDays() async {
     final nextFiveDays = await loadWeatherFiveDaysUsecase();
+
+    return nextFiveDays.map((e) => WeatherViewModel.toViewModel(e)).toList();
   }
 }

@@ -24,6 +24,7 @@ class RemoteLoadWeatherFiveDaysUsecase implements LoadWeatherFiveDaysUsecase {
     final data = response['list'] as List<dynamic>;
 
     for (var json in data) {
+      if (forecast.length >= 5) break;
       final entity = RemoteWeatherModel.fromJson(json).toEntity;
       final containDay = forecast.any((element) {
         final sameDay = element.dateTime?.day == entity.dateTime?.day;

@@ -4,31 +4,29 @@ import 'package:flutter/material.dart';
 import '../../../core/core.dart';
 
 class Graphic extends StatefulWidget {
-  const Graphic({super.key});
+  Graphic({
+    super.key,
+    this.temperatures = const [],
+  }) : assert(temperatures.isNotEmpty);
+  final List<int> temperatures;
 
   @override
   State<Graphic> createState() => _GraphicState();
 }
 
 class _GraphicState extends State<Graphic> {
-  final spots = [
-    const FlSpot(0, 33),
-    const FlSpot(1, 31),
-    const FlSpot(2, 31),
-    const FlSpot(3, 31),
-    const FlSpot(4, 30),
-  ];
+  late List<FlSpot> spots;
   late List<int> spotsIndex;
   late List<LineChartBarData> lineBarsData;
-
-  double get higherTemperature {
-    return spots.reduce((previo, next) => previo.y > next.y ? previo : next).y +
-        1;
-  }
 
   @override
   void initState() {
     super.initState();
+    spots = widget.temperatures
+        .asMap()
+        .entries
+        .map((entry) => FlSpot(entry.key.toDouble(), entry.value.toDouble()))
+        .toList();
     spotsIndex = spots.asMap().keys.toList();
     lineBarsData = [
       LineChartBarData(
@@ -36,6 +34,11 @@ class _GraphicState extends State<Graphic> {
         spots: spots,
       ),
     ];
+  }
+
+  double get higherTemperature {
+    return spots.reduce((previo, next) => previo.y > next.y ? previo : next).y +
+        1;
   }
 
   @override
@@ -54,7 +57,6 @@ class _GraphicState extends State<Graphic> {
               showingIndicators: spotsIndex,
               color: Colors.white,
               spots: spots,
-              isCurved: true,
             ),
           ],
           lineTouchData: LineTouchData(

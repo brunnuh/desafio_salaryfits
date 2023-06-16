@@ -1,7 +1,8 @@
 import 'package:desafio_salaryfits/core/constants/sized.dart';
-import 'package:desafio_salaryfits/presentation/next_days/bloc/next_days_bloc.dart';
 import 'package:desafio_salaryfits/presentation/next_days/components/components.dart';
+import 'package:desafio_salaryfits/presentation/presentation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class NextDaysScreen extends StatefulWidget {
@@ -20,6 +21,12 @@ class _NextDaysScreenState extends State<NextDaysScreen> {
   }
 
   @override
+  void didUpdateWidget(covariant NextDaysScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    widget.bloc.add(LoadNextDays());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
@@ -33,29 +40,67 @@ class _NextDaysScreenState extends State<NextDaysScreen> {
         ),
         backgroundColor: Colors.black,
       ),
-      body: Padding(
-        padding: Sized.middle.all,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Previsão para 5 dias',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 33,
-              ),
+      body: BlocBuilder<NextDaysBloc, NextDaysState>(
+        bloc: widget.bloc,
+        builder: (context, state) {
+          final viewModels = state.viewModels;
+          return Padding(
+            padding: Sized.middle.all,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Previsão para 5 dias',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 33,
+                  ),
+                ),
+                Sized.bigger.verticalSized,
+                Sized.bigger.verticalSized,
+                if (state is NextDaysLoadingState) ...[
+                  const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.white,
+                    ),
+                  )
+                ] else ...[
+                  _NextFiveDaysGraphics(viewModels: viewModels),
+                ],
+              ],
             ),
-            Sized.bigger.verticalSized,
-            Sized.bigger.verticalSized,
-            _NextFiveDaysGraphics(),
-          ],
-        ),
+          );
+        },
       ),
     );
   }
 }
 
-class _NextFiveDaysGraphics extends StatelessWidget {
+class _NextFiveDaysGraphics extends StatefulWidget {
+  const _NextFiveDaysGraphics({this.viewModels = const []});
+  final List<WeatherViewModel> viewModels;
+
+  @override
+  State<_NextFiveDaysGraphics> createState() => _NextFiveDaysGraphicsState();
+}
+
+class _NextFiveDaysGraphicsState extends State<_NextFiveDaysGraphics> {
+  late List<WeatherViewModel> viewModels;
+
+  @override
+  void initState() {
+    super.initState();
+    viewModels = widget.viewModels;
+  }
+
+  @override
+  void didUpdateWidget(covariant _NextFiveDaysGraphics oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.viewModels != oldWidget.viewModels) {
+      viewModels = widget.viewModels;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
@@ -64,11 +109,26 @@ class _NextFiveDaysGraphics extends StatelessWidget {
         child: Stack(
           children: [
             _NextFiveDaysTitles(),
-            Positioned(
-              top: 150,
-              width: constraints.maxWidth,
-              child: const Graphic(),
-            ),
+            if (viewModels.isNotEmpty) ...[
+              Positioned(
+                top: 150,
+                width: constraints.maxWidth,
+                child: Graphic(
+                  temperatures: widget.viewModels
+                      .map((e) => int.parse(e.tempMax))
+                      .toList(),
+                ),
+              ),
+              Positioned(
+                top: 200,
+                width: constraints.maxWidth,
+                child: Graphic(
+                  temperatures: widget.viewModels
+                      .map((e) => int.parse(e.tempMin))
+                      .toList(),
+                ),
+              )
+            ],
           ],
         ),
       );
