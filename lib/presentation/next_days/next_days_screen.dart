@@ -3,6 +3,7 @@ import 'package:desafio_salaryfits/presentation/next_days/components/components.
 import 'package:desafio_salaryfits/presentation/presentation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 class NextDaysScreen extends StatefulWidget {
@@ -142,11 +143,13 @@ class _NextFiveDaysTitles extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    initializeDateFormatting('pt_BR', null);
     DateTime now = DateTime.now();
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(viewModels.length, (index) {
-        String value = DateFormat.EEEE().format(now);
+        String value = DateFormat.EEEE('pt_Br').format(now).split('-').first;
+        final format = DateFormat.Md('pt_Br');
         if (index == 0) {
           value = 'Hoje';
         }
@@ -170,9 +173,10 @@ class _NextFiveDaysTitles extends StatelessWidget {
                       color: Colors.white,
                       fontSize: 14,
                     ),
+                    maxLines: 1,
                   ),
                   Text(
-                    DateFormat.Md().format(now),
+                    format.format(now),
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 12,

@@ -5,5 +5,6 @@ import '../../../../presentation/presentation.dart';
 NextDaysBloc makeNextDaysBloc() {
   return NextDaysBloc(
     loadWeatherFiveDaysUsecase: makeRemoteLoadWeatherFiveDaysUsecase(),
+    loadSettingUsecase: makeLocalLoadSettingsUsecase(),
   );
 }
