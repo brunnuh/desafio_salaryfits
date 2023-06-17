@@ -1,9 +1,9 @@
-import 'package:desafio_salaryfits/domain/domain.dart';
-import 'package:desafio_salaryfits/presentation/settings/bloc/settings_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/core.dart';
+import '../../domain/domain.dart';
+import '../../presentation/presentation.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({
@@ -55,52 +55,95 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 Sized.bigger.verticalSized,
                 Sized.bigger.verticalSized,
-                Row(
-                  children: [
-                    const Text(
-                      'Unidade de temperatura',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 17,
-                      ),
-                    ),
-                    const Spacer(),
-                    SizedBox(
-                      width: 50,
-                      child: DropdownButtonFormField<TemperatureUnit>(
-                        onChanged: (value) {
-                          if (value != null) {
-                            widget.bloc.add(SettingsSave(unit: value));
-                          }
-                        },
-                        value: setting?.unit,
-                        borderRadius: BorderRadius.circular(10),
-                        style: const TextStyle(
-                          color: Color.fromARGB(255, 96, 95, 95),
+                _ListTileCustom<TemperatureUnit>(
+                  label: 'Unidade de temperatura',
+                  valueInitial: setting?.unit,
+                  onChanged: (value) {
+                    if (value != null) {
+                      widget.bloc.add(SettingsSave(unit: value));
+                    }
+                  },
+                  items: TemperatureUnit.values
+                      .map(
+                        (unit) => DropdownMenuItem(
+                          value: unit,
+                          child: Text(unit.label),
                         ),
-                        icon: const Icon(
-                          Icons.unfold_more,
+                      )
+                      .toList(),
+                ),
+                _ListTileCustom<Language>(
+                  label: 'Idioma da descrição',
+                  valueInitial: setting?.language,
+                  items: Language.values
+                      .map(
+                        (language) => DropdownMenuItem(
+                          value: language,
+                          child: Text(
+                            language.name,
+                          ),
                         ),
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                        items: TemperatureUnit.values
-                            .map(
-                              (unit) => DropdownMenuItem(
-                                value: unit,
-                                child: Text(unit.label),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ),
-                  ],
-                )
+                      )
+                      .toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      widget.bloc.add(SettingsSave(language: value));
+                    }
+                  },
+                ),
               ],
             ),
           ),
         );
       },
+    );
+  }
+}
+
+class _ListTileCustom<T> extends StatelessWidget {
+  const _ListTileCustom({
+    this.valueInitial,
+    this.items = const [],
+    required this.onChanged,
+    required this.label,
+  });
+
+  final String label;
+  final Function(T? value) onChanged;
+  final T? valueInitial;
+  final List<DropdownMenuItem<T>>? items;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Text(
+          label,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 17,
+          ),
+        ),
+        const Spacer(),
+        SizedBox(
+          width: 50,
+          child: DropdownButtonFormField<T>(
+            onChanged: onChanged,
+            value: valueInitial,
+            borderRadius: BorderRadius.circular(10),
+            style: const TextStyle(
+              color: Color.fromARGB(255, 96, 95, 95),
+            ),
+            icon: const Icon(
+              Icons.unfold_more,
+            ),
+            decoration: const InputDecoration(
+              border: InputBorder.none,
+            ),
+            items: items,
+          ),
+        ),
+      ],
     );
   }
 }

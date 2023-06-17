@@ -21,8 +21,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       case SettingsLoad():
         await _loadSettings();
         emit(SettingsLoadedState(setting: setting));
-      case SettingsSave(unit: var unit):
-        setting = setting?.copyWith(unit: unit);
+      case SettingsSave(unit: var unit, language: var language):
+        setting = setting?.copyWith(unit: unit, language: language);
         _saveSettings();
     }
   }

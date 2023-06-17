@@ -5,9 +5,11 @@ sealed class SettingsEvent {}
 class SettingsLoad extends SettingsEvent {}
 
 class SettingsSave extends SettingsEvent {
-  final TemperatureUnit unit;
+  final TemperatureUnit? unit;
+  final Language? language;
 
   SettingsSave({
-    required this.unit,
+    this.unit,
+    this.language,
   });
 }
