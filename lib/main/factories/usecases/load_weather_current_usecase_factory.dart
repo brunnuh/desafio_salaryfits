@@ -1,7 +1,6 @@
-import 'package:desafio_salaryfits/data/usecases/load_weather_current/remote_load_weather_current_usecase.dart';
-import 'package:desafio_salaryfits/domain/domain.dart';
-import 'package:desafio_salaryfits/main/factories/device/location_device_factory.dart';
-import 'package:desafio_salaryfits/main/factories/http/http.dart';
+import '../../../../domain/domain.dart';
+import '../../../data/data.dart';
+import '../../../main/factories/factories.dart';
 
 LoadWeatherCurrentUsecase makeRemoteLoadWeaterCurrentFactory() {
   return RemoteLoadWeatherCurrentUsecase(

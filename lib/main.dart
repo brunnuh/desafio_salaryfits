@@ -1,4 +1,3 @@
-import 'package:desafio_salaryfits/presentation/presentation.dart';
 import 'package:flutter/material.dart';
 
 import 'main/factories/factories.dart';
@@ -25,7 +24,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (_) => makeMeteorologyScreen(),
         '/nextDays': (_) => makeNextDaysScreen(),
-        '/settings': (_) => const SettingsScreen()
+        '/settings': (_) => makeSettingsScreen(),
       },
     );
   }

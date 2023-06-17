@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:desafio_salaryfits/data/data.dart';
 
 import '../../../domain/domain.dart';
@@ -13,6 +11,6 @@ class LocalSaveSettingUsecase implements SaveSettingUsecase {
   Future<void> call({required SettingEntity setting}) async {
     final json = LocalSettingModel.toModel(setting).toJson();
 
-    log(json);
+    await cacheStorage.save(key: 'setting', value: json);
   }
 }

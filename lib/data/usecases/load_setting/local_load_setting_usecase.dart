@@ -9,12 +9,10 @@ class LocalLoadSettingUsecase implements LoadSettingUsecase {
   final CacheStorage cacheStorage;
 
   @override
-  Future<SettingEntity> call() async {
+  Future<SettingEntity?> call() async {
     final json = await cacheStorage.fetch('setting');
 
-    return SettingEntity(
-      unit: TemperatureUnit.celcius,
-      language: Language.ptBr,
-    );
+    final setting = LocalSettingModel.fromJson(json).toEntity;
+    return setting;
   }
 }

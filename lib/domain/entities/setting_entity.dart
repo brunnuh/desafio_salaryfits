@@ -6,6 +6,16 @@ class SettingEntity {
     required this.unit,
     required this.language,
   });
+
+  SettingEntity copyWith({
+    TemperatureUnit? unit,
+    Language? language,
+  }) {
+    return SettingEntity(
+      unit: unit ?? this.unit,
+      language: language ?? this.language,
+    );
+  }
 }
 
 enum TemperatureUnit {
