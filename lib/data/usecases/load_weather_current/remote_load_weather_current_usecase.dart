@@ -8,12 +8,20 @@ class RemoteLoadWeatherCurrentUsecase implements LoadWeatherCurrentUsecase {
   });
 
   final HttpClient httpClient;
-
   final String url;
+
+  Map<String, dynamic> _setSettingsParams(SettingEntity? entity) {
+    return {
+      'units':
+          entity?.unit == TemperatureUnit.fahrenheit ? 'imperial' : 'metric',
+      'lang': entity?.language == Language.en ? 'en' : 'pt_br',
+    };
+  }
 
   @override
   Future<WeatherEntity> call({
     required ({double lat, double lon}) position,
+    SettingEntity? settingEntity,
   }) async {
     final (:lat, :lon) = position;
 
@@ -23,7 +31,7 @@ class RemoteLoadWeatherCurrentUsecase implements LoadWeatherCurrentUsecase {
       params: {
         'lat': lat,
         'lon': lon,
-        'units': 'metric',
+        ..._setSettingsParams(settingEntity),
       },
     );
 

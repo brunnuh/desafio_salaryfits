@@ -17,6 +17,8 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  bool hadChanges = false;
+
   @override
   void initState() {
     super.initState();
@@ -33,7 +35,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           backgroundColor: Colors.black,
           appBar: AppBar(
             leading: IconButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pop(context, hadChanges),
               icon: const Icon(
                 Icons.arrow_back_ios,
                 color: Colors.white,
@@ -60,6 +62,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   valueInitial: setting?.unit,
                   onChanged: (value) {
                     if (value != null) {
+                      hadChanges = true;
                       widget.bloc.add(SettingsSave(unit: value));
                     }
                   },
@@ -87,6 +90,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       .toList(),
                   onChanged: (value) {
                     if (value != null) {
+                      hadChanges = true;
                       widget.bloc.add(SettingsSave(language: value));
                     }
                   },

@@ -22,20 +22,22 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         await _loadSettings();
         emit(SettingsLoadedState(setting: setting));
       case SettingsSave(unit: var unit, language: var language):
-        setting = setting?.copyWith(unit: unit, language: language);
+        setting = setting.copyWith(unit: unit, language: language);
         _saveSettings();
     }
   }
 
-  SettingEntity? setting;
+  SettingEntity setting = SettingEntity.empty();
 
   Future<void> _loadSettings() async {
-    setting = await loadSettingUsecase();
+    final result = await loadSettingUsecase();
+
+    if (result != null) {
+      setting = result;
+    }
   }
 
   Future<void> _saveSettings() async {
-    if (setting != null) {
-      await saveSettingUsecase(setting: setting!);
-    }
+    await saveSettingUsecase(setting: setting);
   }
 }

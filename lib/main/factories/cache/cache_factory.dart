@@ -4,6 +4,6 @@ import 'package:localstorage/localstorage.dart';
 
 CacheStorage makeCacheFactory() {
   return CacheAdapter(
-    localStorage: LocalStorage('desafio_salaryfits'),
+    localStorage: LocalStorage('desafioSalaryfits'),
   );
 }

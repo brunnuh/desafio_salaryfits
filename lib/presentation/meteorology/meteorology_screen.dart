@@ -67,8 +67,17 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
                   ),
                   actions: [
                     IconButton(
-                      onPressed: () =>
-                          Navigator.pushNamed(context, '/settings'),
+                      onPressed: () async {
+                        await Navigator.pushNamed(context, '/settings')
+                            .then((value) {
+                          final hadChanges = value as bool;
+                          if (hadChanges) {
+                            widget.bloc.add(
+                              MeterologyLoadWeatherEvent(isFirstLoad: true),
+                            );
+                          }
+                        });
+                      },
                       icon: const Icon(
                         Icons.settings,
                         color: Colors.white,

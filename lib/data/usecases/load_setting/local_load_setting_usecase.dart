@@ -12,7 +12,10 @@ class LocalLoadSettingUsecase implements LoadSettingUsecase {
   Future<SettingEntity?> call() async {
     final json = await cacheStorage.fetch('setting');
 
-    final setting = LocalSettingModel.fromJson(json).toEntity;
-    return setting;
+    if (json != null) {
+      final setting = LocalSettingModel.fromJson(json).toEntity;
+      return setting;
+    }
+    return null;
   }
 }

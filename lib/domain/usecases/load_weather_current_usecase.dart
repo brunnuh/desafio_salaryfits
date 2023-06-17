@@ -1,5 +1,8 @@
 import '../domain.dart';
 
 abstract interface class LoadWeatherCurrentUsecase {
-  Future<WeatherEntity> call({required ({double lat, double lon}) position});
+  Future<WeatherEntity> call({
+    required ({double lat, double lon}) position,
+    SettingEntity? settingEntity,
+  });
 }
