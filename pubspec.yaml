@@ -18,6 +18,7 @@ dependencies:
   geolocator: ^9.0.2
   fl_chart: ^0.63.0
   intl: ^0.18.1
+  localstorage: ^4.0.1+2
 
 dev_dependencies:
   flutter_test:

@@ -66,10 +66,14 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
                     ],
                   ),
                   actions: [
-                    const Icon(
-                      Icons.more_vert_outlined,
-                      color: Colors.white,
-                      size: 32,
+                    IconButton(
+                      onPressed: () =>
+                          Navigator.pushNamed(context, '/settings'),
+                      icon: const Icon(
+                        Icons.settings,
+                        color: Colors.white,
+                        size: 32,
+                      ),
                     ),
                     InkWell(
                       onTap: () => widget.bloc.add(MeterologyLoadWeatherEvent(
