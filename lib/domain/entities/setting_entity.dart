@@ -7,6 +7,9 @@ class SettingEntity {
     required this.language,
   });
 
+  factory SettingEntity.empty() =>
+      SettingEntity(unit: TemperatureUnit.celcius, language: Language.ptBr);
+
   SettingEntity copyWith({
     TemperatureUnit? unit,
     Language? language,

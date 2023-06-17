@@ -6,6 +6,5 @@ LoadWeatherCurrentUsecase makeRemoteLoadWeaterCurrentFactory() {
   return RemoteLoadWeatherCurrentUsecase(
     httpClient: makeHttpClient(),
     url: makeApiUrl('weather'),
-    locationDevice: makeLocationFactory(),
   );
 }

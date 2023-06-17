@@ -3,6 +3,6 @@ import '../../usecases/usecases.dart';
 
 MeteorologyBloc makeMeteorologyBloc() {
   return MeteorologyBloc(
-    loadWeatherCurrentUsecase: makeRemoteLoadWeaterCurrentFactory(),
-  );
+      loadWeatherCurrentUsecase: makeRemoteLoadWeaterCurrentFactory(),
+      getPositionCurrentUsecase: makeGetPositionCurrentFactory());
 }
