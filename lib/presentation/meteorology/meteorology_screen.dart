@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../core/core.dart';
+import '../../domain/domain.dart';
 import '../presentation.dart';
 import 'components/components.dart';
 
@@ -37,6 +38,7 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
         final current = state.viewModel;
         final loading = state is MeteorologyLoadingState;
         final firstLoad = loading && state.isFirstLoad;
+        final setting = state.settingEntity;
 
         return Scaffold(
           appBar: firstLoad
@@ -73,7 +75,10 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
                           final hadChanges = value as bool;
                           if (hadChanges) {
                             widget.bloc.add(
-                              MeterologyLoadWeatherEvent(isFirstLoad: true),
+                              MeterologyLoadWeatherEvent(
+                                isFirstLoad: true,
+                                setting: setting,
+                              ),
                             );
                           }
                         });
@@ -85,8 +90,12 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
                       ),
                     ),
                     InkWell(
-                      onTap: () => widget.bloc.add(MeterologyLoadWeatherEvent(
-                          weatherViewModel: current)),
+                      onTap: () {
+                        widget.bloc.add(MeterologyLoadWeatherEvent(
+                          weatherViewModel: current,
+                          setting: setting,
+                        ));
+                      },
                       child: const Icon(
                         Icons.refresh_outlined,
                         color: Colors.white,
@@ -112,13 +121,15 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
                       Sized.bigger.verticalSized,
                       _CurrentTemp(
                         currentTemperature: current.currentTemperature,
+                        unit: setting.unit,
                       ),
                       Text(
-                        "${current.description} ${current.tempMin}/${current.tempMax}",
+                        "${current.description} Min:${current.tempMin}/Max:${current.tempMax}",
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 20,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                       Sized.bigger.verticalSized,
@@ -144,7 +155,10 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
                         },
                       ),
                       Sized.middle.verticalSized,
-                      MoreInfoTemperature(viewModel: current),
+                      MoreInfoTemperature(
+                        viewModel: current,
+                        unit: setting.unit,
+                      ),
                     ],
                   ),
           ),
@@ -157,9 +171,11 @@ class _MeteorologyScreenState extends State<MeteorologyScreen> {
 class _CurrentTemp extends StatelessWidget {
   const _CurrentTemp({
     required this.currentTemperature,
+    required this.unit,
   });
 
   final String currentTemperature;
+  final TemperatureUnit unit;
 
   @override
   Widget build(BuildContext context) {
@@ -176,9 +192,9 @@ class _CurrentTemp extends StatelessWidget {
         ),
         Container(
           margin: Sized.middle.vertical,
-          child: const Text(
-            "°C",
-            style: TextStyle(
+          child: Text(
+            unit == TemperatureUnit.celcius ? "°C" : "°F",
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 30,
               fontWeight: FontWeight.bold,

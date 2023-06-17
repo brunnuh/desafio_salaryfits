@@ -1,11 +1,17 @@
+import 'package:desafio_salaryfits/domain/domain.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/core.dart';
 import '../../presentation.dart';
 
 class MoreInfoTemperature extends StatelessWidget {
-  const MoreInfoTemperature({super.key, required this.viewModel});
+  const MoreInfoTemperature({
+    super.key,
+    required this.viewModel,
+    required this.unit,
+  });
   final WeatherViewModel viewModel;
+  final TemperatureUnit unit;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +21,10 @@ class MoreInfoTemperature extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
-            child: _InfosWind(viewModel: viewModel),
+            child: _InfosWind(
+              viewModel: viewModel,
+              unit: unit,
+            ),
           ),
           Sized.small.horizontalSized,
           Expanded(
@@ -68,10 +77,11 @@ class _InfosAir extends StatelessWidget {
 class _InfosWind extends StatelessWidget {
   const _InfosWind({
     required this.viewModel,
+    required this.unit,
   });
 
   final WeatherViewModel viewModel;
-
+  final TemperatureUnit unit;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -98,7 +108,9 @@ class _InfosWind extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  viewModel.speedWindMsToKm,
+                  unit == TemperatureUnit.celcius
+                      ? viewModel.speedWindMsToKm
+                      : viewModel.speedWindMilesHour,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 14,

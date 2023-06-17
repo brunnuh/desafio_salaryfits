@@ -61,6 +61,10 @@ class WeatherViewModel {
     return '${(speedWind * 3.6).toStringAsFixed(1).replaceAll('.', ',')}Km/h';
   }
 
+  String get speedWindMilesHour {
+    return '${speedWind}Mi/h';
+  }
+
   double get degreeWindoToRadi {
     return ((degreeWind + 90) * pi) / 180.0;
   }

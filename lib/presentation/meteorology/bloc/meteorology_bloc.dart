@@ -28,32 +28,30 @@ class MeteorologyBloc extends Bloc<MeteorologyEvent, MeteorologyState> {
         if (isFirstLoad) {
           await _loadSettings();
         }
-        emit(
-          MeteorologyLoadingState(
-            isFirstLoad: isFirstLoad,
-            viewModel: event.weatherViewModel ?? WeatherViewModel.empty(),
-          ),
-        );
-        _loadWeatherCurrent();
-      case MeterologySetWeatherEvent(weatherViewModel: var viewModel):
-        emit(MeteorologyLoadedWeatherState(viewModel: viewModel!));
+        emit(MeteorologyLoadingState(
+          isFirstLoad: isFirstLoad,
+          viewModel: event.weatherViewModel ?? WeatherViewModel.empty(),
+          settingEntity: setting,
+        ));
+        await _loadWeatherCurrent();
+        emit(MeteorologyLoadedWeatherState(
+          viewModel: viewModel,
+          settingEntity: setting,
+        ));
     }
   }
 
   SettingEntity setting = SettingEntity.empty();
+  WeatherViewModel viewModel = WeatherViewModel.empty();
 
-  void _loadWeatherCurrent() async {
+  Future<void> _loadWeatherCurrent() async {
     final position = await _getPositionCurrentUsecase();
     final weatherEntity = await _loadWeatherCurrentUsecase(
       position: position,
       settingEntity: setting,
     );
 
-    add(
-      MeterologySetWeatherEvent(
-        weatherViewModel: WeatherViewModel.toViewModel(weatherEntity),
-      ),
-    );
+    viewModel = WeatherViewModel.toViewModel(weatherEntity);
   }
 
   Future<void> _loadSettings() async {
