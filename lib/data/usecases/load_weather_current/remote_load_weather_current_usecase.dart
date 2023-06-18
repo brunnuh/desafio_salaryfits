@@ -25,16 +25,20 @@ class RemoteLoadWeatherCurrentUsecase implements LoadWeatherCurrentUsecase {
   }) async {
     final (:lat, :lon) = position;
 
-    final response = await httpClient(
-      url: url,
-      method: Method.get,
-      params: {
-        'lat': lat,
-        'lon': lon,
-        ..._setSettingsParams(settingEntity),
-      },
-    );
+    try {
+      final response = await httpClient(
+        url: url,
+        method: Method.get,
+        params: {
+          'lat': lat,
+          'lon': lon,
+          ..._setSettingsParams(settingEntity),
+        },
+      );
 
-    return RemoteWeatherModel.fromJson(response).toEntity;
+      return RemoteWeatherModel.fromJson(response).toEntity;
+    } catch (error) {
+      throw DomainError.unexpected;
+    }
   }
 }

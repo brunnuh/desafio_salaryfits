@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
 class HttpClientSpy extends Mock implements HttpClient {
-  void request(dynamic data) => when(
+  When _mockCall() => when(
         () => this(
           method: Method.get,
           url: any(named: 'url'),
@@ -13,7 +13,10 @@ class HttpClientSpy extends Mock implements HttpClient {
           headers: any(named: 'headers'),
           params: any(named: 'params'),
         ),
-      ).thenAnswer((_) async => data);
+      );
+
+  void request(dynamic data) => _mockCall().thenAnswer((_) async => data);
+  void mockErrorRequest(HttpError error) => _mockCall().thenThrow(error);
 }
 
 void main() {
@@ -88,5 +91,13 @@ void main() {
         airHumidity: weatherData['main']['humidity'],
       ),
     );
+  });
+
+  test('Should return error on  400', () {
+    httpClient.mockErrorRequest(HttpError.badRequest);
+
+    final future = sut(position: position);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
