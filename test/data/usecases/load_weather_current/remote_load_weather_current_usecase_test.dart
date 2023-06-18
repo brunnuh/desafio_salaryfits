@@ -20,11 +20,11 @@ class HttpClientSpy extends Mock implements HttpClient {
 }
 
 void main() {
-  late final String url;
-  late final ({double lat, double lon}) position;
-  late final HttpClientSpy httpClient;
-  late final RemoteLoadWeatherCurrentUsecase sut;
-  late final Map<String, dynamic> weatherData;
+  late String url;
+  late ({double lat, double lon}) position;
+  late HttpClientSpy httpClient;
+  late RemoteLoadWeatherCurrentUsecase sut;
+  late Map<String, dynamic> weatherData;
   Map<String, dynamic> mockHttpClientResponse() => {
         "weather": [
           {
@@ -107,5 +107,13 @@ void main() {
     final future = sut(position: position);
 
     expect(future, throwsA(DomainError.invalidCredentials));
+  });
+
+  test('Should return error on  500', () {
+    httpClient.mockErrorRequest(HttpError.serverError);
+
+    final future = sut(position: position);
+
+    expect(future, throwsA(DomainError.unexpected));
   });
 }
