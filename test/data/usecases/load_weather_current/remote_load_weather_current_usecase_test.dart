@@ -100,4 +100,12 @@ void main() {
 
     expect(future, throwsA(DomainError.unexpected));
   });
+
+  test('Should return error on  401', () {
+    httpClient.mockErrorRequest(HttpError.unauthorized);
+
+    final future = sut(position: position);
+
+    expect(future, throwsA(DomainError.invalidCredentials));
+  });
 }

@@ -38,7 +38,9 @@ class RemoteLoadWeatherCurrentUsecase implements LoadWeatherCurrentUsecase {
 
       return RemoteWeatherModel.fromJson(response).toEntity;
     } catch (error) {
-      throw DomainError.unexpected;
+      throw error == HttpError.badRequest
+          ? DomainError.unexpected
+          : DomainError.invalidCredentials;
     }
   }
 }
