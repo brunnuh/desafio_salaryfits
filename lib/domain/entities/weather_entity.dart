@@ -24,4 +24,37 @@ class WeatherEntity {
     required this.airHumidity,
     this.dateTime,
   });
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is WeatherEntity &&
+        other.currentTemperature == currentTemperature &&
+        other.description == description &&
+        other.tempMin == tempMin &&
+        other.tempMax == tempMax &&
+        other.city == city &&
+        other.pressure == pressure &&
+        other.feelsLike == feelsLike &&
+        other.speedWind == speedWind &&
+        other.degreeWind == degreeWind &&
+        other.dateTime == dateTime &&
+        other.airHumidity == airHumidity;
+  }
+
+  @override
+  int get hashCode {
+    return currentTemperature.hashCode ^
+        description.hashCode ^
+        tempMin.hashCode ^
+        tempMax.hashCode ^
+        city.hashCode ^
+        pressure.hashCode ^
+        feelsLike.hashCode ^
+        speedWind.hashCode ^
+        degreeWind.hashCode ^
+        dateTime.hashCode ^
+        airHumidity.hashCode;
+  }
 }

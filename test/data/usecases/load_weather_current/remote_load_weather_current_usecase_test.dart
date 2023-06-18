@@ -1,4 +1,5 @@
 import 'package:desafio_salaryfits/data/data.dart';
+import 'package:desafio_salaryfits/domain/domain.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -20,7 +21,7 @@ void main() {
   late final ({double lat, double lon}) position;
   late final HttpClientSpy httpClient;
   late final RemoteLoadWeatherCurrentUsecase sut;
-
+  late final Map<String, dynamic> weatherData;
   Map<String, dynamic> mockHttpClientResponse() => {
         "weather": [
           {
@@ -48,7 +49,8 @@ void main() {
     httpClient = HttpClientSpy();
     sut = RemoteLoadWeatherCurrentUsecase(httpClient: httpClient, url: url);
 
-    httpClient.request(mockHttpClientResponse());
+    weatherData = mockHttpClientResponse();
+    httpClient.request(weatherData);
   });
 
   test('Should call http client with correct values', () async {
@@ -66,5 +68,25 @@ void main() {
         },
       ),
     ).called(1);
+  });
+
+  test('Should return weather on 200', () async {
+    final weather = await sut(position: position);
+
+    expect(
+      weather,
+      WeatherEntity(
+        currentTemperature: weatherData['main']['temp'].toDouble(),
+        description: weatherData['weather'][0]['description'],
+        tempMin: weatherData['main']['temp_min'].toDouble(),
+        tempMax: weatherData['main']['temp_max'].toDouble(),
+        speedWind: weatherData['wind']['speed'].toDouble(),
+        city: weatherData['name'],
+        pressure: weatherData['main']['pressure'],
+        feelsLike: weatherData['main']['feels_like'].toDouble(),
+        degreeWind: weatherData['wind']['deg'],
+        airHumidity: weatherData['main']['humidity'],
+      ),
+    );
   });
 }
